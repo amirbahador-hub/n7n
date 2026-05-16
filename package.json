@@ -1,5 +1,5 @@
 {
-  "name": "n8n-monorepo",
+  "name": "n7n-monorepo",
   "version": "2.21.0",
   "private": true,
   "engines": {
@@ -39,6 +39,7 @@
     "generate:third-party-licenses": "node scripts/generate-third-party-licenses.mjs",
     "setup-backend-module": "node scripts/ensure-zx.mjs && zx scripts/backend-module/setup.mjs",
     "start": "node scripts/os-normalize.mjs --dir packages/cli/bin n8n",
+    "start:n7n": "node scripts/os-normalize.mjs --dir packages/cli/bin n7n",
     "test": "JEST_JUNIT_CLASSNAME={filepath} turbo run test",
     "test:ci": "turbo run test --continue --concurrency=1",
     "test:ci:frontend": "turbo run test --continue --filter='./packages/frontend/**'",

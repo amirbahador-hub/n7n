@@ -1,0 +1,11 @@
+{
+	"node": "n8n-nodes-base.n7nCodexTask",
+	"nodeVersion": "1.0",
+	"codexVersion": "1.0",
+	"details": "Defines a repository-aware coding agent task for n7n orchestration.",
+	"categories": ["Development", "Core Nodes"],
+	"alias": ["Codex", "Coding Agent", "AI Task"],
+	"subcategories": {
+		"Core Nodes": ["AI", "Helpers"]
+	}
+}

@@ -150,34 +150,16 @@ describe('MCPOnboardingModal', () => {
 	it('renders the prompt immediately when MCP is already enabled on mount', async () => {
 		mockMcpStore.mcpAccessEnabled = true;
 
-		const { findByTestId, findByText, getByTestId } = renderComponent();
+		const { findByTestId, findByText } = renderComponent();
 
-		expect(await findByText(/Show me the n8n MCP connector/)).toBeInTheDocument();
+		expect(await findByText(/Set up the n8n MCP server for Codex/)).toBeInTheDocument();
 		expect(await findByText('https://example.n8n.cloud/mcp-server/http')).toBeInTheDocument();
-		expect(await findByText('Paste the prompt in Claude')).toBeInTheDocument();
-		expect(await findByText('Paste Server URL')).toBeInTheDocument();
-		expect(await findByTestId('mcp-onboarding-claude-server-url')).toBeInTheDocument();
-		expect(getByTestId('mcp-onboarding-copy-server-url-button')).toBeEnabled();
+		expect(await findByText('Paste the prompt in Codex')).toBeInTheDocument();
+		expect(await findByTestId('mcp-onboarding-restart-step')).toBeInTheDocument();
 		expect(mockExperimentStore.trackSetupShown).toHaveBeenCalledWith(
 			'first_open_modal',
-			'claude',
+			'codex',
 			'prompt',
-		);
-	});
-
-	it('copies the Claude server URL with server-url telemetry', async () => {
-		const user = userEvent.setup();
-		mockMcpStore.mcpAccessEnabled = true;
-
-		const { getByTestId } = renderComponent();
-
-		await user.click(getByTestId('mcp-onboarding-copy-server-url-button'));
-
-		expect(mockClipboardCopy).toHaveBeenCalledWith('https://example.n8n.cloud/mcp-server/http');
-		expect(mockExperimentStore.trackCopiedParameter).toHaveBeenCalledWith(
-			'first_open_modal',
-			'claude',
-			'server-url',
 		);
 	});
 
@@ -189,45 +171,23 @@ describe('MCPOnboardingModal', () => {
 
 		const { getByRole, findByText, getByTestId } = renderComponent();
 
-		await findByText(/Show me the n8n MCP connector/);
+		await findByText(/Set up the n8n MCP server for Codex/);
 		await user.click(getByRole('switch'));
 
 		await waitFor(() => {
 			expect(mockShowError).toHaveBeenCalledWith(error, 'Error updating MCP access');
 		});
-		expect(await findByText(/Show me the n8n MCP connector/)).toBeInTheDocument();
+		expect(await findByText(/Set up the n8n MCP server for Codex/)).toBeInTheDocument();
 		expect(getByTestId('mcp-onboarding-copy-prompt-button')).toBeEnabled();
 	});
 
-	it('switches to Claude Code setup instructions', async () => {
-		const user = userEvent.setup();
-		mockMcpStore.mcpAccessEnabled = true;
-
-		const { getByText, getByTestId, container } = renderComponent();
-
-		await user.click(getByText('Claude Code'));
-
-		expect(mockExperimentStore.trackClientSelected).toHaveBeenCalledWith(
-			'first_open_modal',
-			'claude_code',
-		);
-		expect(mockExperimentStore.trackSetupShown).toHaveBeenCalledWith(
-			'first_open_modal',
-			'claude_code',
-			'prompt',
-		);
-		expect(container.textContent).toContain('claude mcp add --scope user --transport http n8n');
-		expect(getByTestId('mcp-onboarding-restart-step')).toHaveTextContent(
-			'Restart Claude Code and connect to n8n',
-		);
-	});
-
-	it('switches between Claude Code and Codex setup instructions', async () => {
+	it('switches between Cursor and Codex setup instructions', async () => {
 		const user = userEvent.setup();
 		mockMcpStore.mcpAccessEnabled = true;
 
 		const { getByText, getByTestId, queryByTestId, container } = renderComponent();
 
+		await user.click(getByText('Cursor'));
 		await user.click(getByText('Codex'));
 
 		expect(mockExperimentStore.trackClientSelected).toHaveBeenCalledWith(
@@ -236,26 +196,10 @@ describe('MCPOnboardingModal', () => {
 		);
 		expect(container.textContent).toContain('Paste the prompt in Codex');
 		expect(container.textContent).toContain('[mcp_servers.n8n]');
-		expect(queryByTestId('mcp-onboarding-claude-server-url')).not.toBeInTheDocument();
+		expect(queryByTestId('mcp-onboarding-server-url')).not.toBeInTheDocument();
 		expect(getByTestId('mcp-onboarding-restart-step')).toHaveTextContent(
 			'Restart Codex and connect to n8n',
 		);
-	});
-
-	it('switches to Claude setup instructions', async () => {
-		const user = userEvent.setup();
-		mockMcpStore.mcpAccessEnabled = true;
-
-		const { getByText, queryByTestId, container } = renderComponent();
-
-		await user.click(getByText('Claude'));
-
-		expect(mockExperimentStore.trackClientSelected).not.toHaveBeenCalled();
-		expect(container.textContent).toContain('Show me the n8n MCP connector');
-		expect(container.textContent).toContain('Paste the prompt in Claude');
-		expect(container.textContent).toContain('Paste Server URL');
-		expect(container.textContent).not.toContain('claude mcp add --scope user --transport http n8n');
-		expect(queryByTestId('mcp-onboarding-restart-step')).not.toBeInTheDocument();
 	});
 
 	it('switches to ChatGPT setup instructions', async () => {
@@ -291,7 +235,7 @@ describe('MCPOnboardingModal', () => {
 		expect(container.textContent).not.toContain('complete the n8n OAuth flow');
 		expect(container.textContent).not.toContain('[mcp_servers.n8n]');
 		expect(queryByTestId('mcp-onboarding-client-setup')).not.toBeInTheDocument();
-		expect(queryByTestId('mcp-onboarding-claude-server-url')).not.toBeInTheDocument();
+		expect(queryByTestId('mcp-onboarding-server-url')).not.toBeInTheDocument();
 		expect(queryByTestId('mcp-onboarding-copy-prompt-button')).not.toBeInTheDocument();
 		expect(queryByTestId('mcp-onboarding-restart-step')).not.toBeInTheDocument();
 
@@ -357,7 +301,7 @@ describe('MCPOnboardingModal', () => {
 		await user.click(getByTestId('mcp-onboarding-generic-close'));
 
 		expect(mockExperimentStore.trackDismissed).toHaveBeenCalledWith('tile', {
-			activeClient: 'claude',
+			activeClient: 'codex',
 			enabledDuringThisOpen: false,
 			mcpAccessEnabled: false,
 		});

@@ -19,8 +19,6 @@ const emit = defineEmits<{
 const i18n = useI18n();
 
 const promptKeys: Record<MCPOnboardingPromptClient, BaseTextKey> = {
-	claude: 'experiments.surfaceMcpToNewCloudUsers.onboarding.prompt.claude' as BaseTextKey,
-	claude_code: 'experiments.surfaceMcpToNewCloudUsers.onboarding.prompt.claudeCode',
 	cursor: 'experiments.surfaceMcpToNewCloudUsers.onboarding.prompt.cursor' as BaseTextKey,
 	codex: 'experiments.surfaceMcpToNewCloudUsers.onboarding.prompt.codex',
 };

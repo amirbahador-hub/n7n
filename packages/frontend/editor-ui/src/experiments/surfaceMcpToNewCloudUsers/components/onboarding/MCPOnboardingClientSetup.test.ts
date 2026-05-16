@@ -14,7 +14,7 @@ vi.mock('@/app/composables/useClipboard', () => ({
 
 const renderComponent = createComponentRenderer(MCPOnboardingClientSetup, {
 	props: {
-		client: 'claude_code',
+		client: 'codex',
 		serverUrl: 'https://example.n8n.cloud/mcp-server/http',
 	},
 });
@@ -24,30 +24,8 @@ describe('MCPOnboardingClientSetup', () => {
 		mockClipboardCopy.mockReset();
 	});
 
-	it('renders the Claude Code prompt with the server URL and OAuth instructions', () => {
-		const { container } = renderComponent();
-		const text = container.textContent ?? '';
-
-		expect(text).toContain('claude mcp add --scope user --transport http n8n');
-		expect(text).toContain('https://example.n8n.cloud/mcp-server/http');
-		expect(text).toContain('complete the n8n OAuth flow');
-		expect(text).not.toContain('claude mcp list');
-	});
-
-	it('renders the Claude connector prompt', () => {
-		const { container, queryByTestId } = renderComponent({
-			props: { client: 'claude' },
-		});
-		const text = container.textContent ?? '';
-
-		expect(text).toContain('Show me the n8n MCP connector');
-		expect(text).toContain("I'll paste my server URL when you tell me where it goes.");
-		expect(text).not.toContain('claude mcp add --scope user --transport http n8n');
-		expect(queryByTestId('mcp-onboarding-claude-server-url')).not.toBeInTheDocument();
-	});
-
 	it('renders the Codex prompt with the TOML section and home-dir path', () => {
-		const { container } = renderComponent({ props: { client: 'codex' } });
+		const { container } = renderComponent();
 		const text = container.textContent ?? '';
 
 		expect(text).toContain('[mcp_servers.n8n]');
@@ -64,7 +42,7 @@ describe('MCPOnboardingClientSetup', () => {
 
 		expect(mockClipboardCopy).toHaveBeenCalledTimes(1);
 		const copiedText = mockClipboardCopy.mock.calls[0][0] as string;
-		expect(copiedText).toContain('claude mcp add --scope user');
+		expect(copiedText).toContain('[mcp_servers.n8n]');
 		expect(copiedText).toContain('complete the n8n OAuth flow');
 
 		expect(emitted('copy')).toEqual([['agent-prompt']]);

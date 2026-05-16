@@ -1,0 +1,11 @@
+{
+	"node": "n8n-nodes-base.n7nMypyValidation",
+	"nodeVersion": "1.0",
+	"codexVersion": "1.0",
+	"details": "Represents a mypy validation step with repair-loop metadata.",
+	"categories": ["Development", "Core Nodes"],
+	"alias": ["mypy", "Python Type Check", "Validation"],
+	"subcategories": {
+		"Core Nodes": ["Helpers"]
+	}
+}

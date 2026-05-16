@@ -1,0 +1,11 @@
+{
+	"node": "n8n-nodes-base.n7nRepositoryAnalysis",
+	"nodeVersion": "1.0",
+	"codexVersion": "1.0",
+	"details": "Prepares repository analysis requirements for AI-native engineering workflows.",
+	"categories": ["Development", "Core Nodes"],
+	"alias": ["Repository Analysis", "Repo Context", "Architecture Summary"],
+	"subcategories": {
+		"Core Nodes": ["AI", "Helpers"]
+	}
+}

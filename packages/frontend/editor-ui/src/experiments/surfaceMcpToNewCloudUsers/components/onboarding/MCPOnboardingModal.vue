@@ -39,7 +39,7 @@ const mcpStore = useMCPStore();
 const experimentStore = useSurfaceMcpToNewCloudUsersStore();
 const modalBus = createEventBus();
 
-const activeClient = ref<MCPOnboardingClient>('claude');
+const activeClient = ref<MCPOnboardingClient>('codex');
 const isToggling = ref(false);
 const enabledDuringThisOpen = ref(false);
 const setupShownClients = new Set<MCPOnboardingClient>();
@@ -47,18 +47,6 @@ const setupShownClients = new Set<MCPOnboardingClient>();
 const surface = computed<MCPOnboardingSurface>(() => props.data?.surface ?? 'tile');
 
 const clientOptions = computed<MCPOnboardingClientOption[]>(() => [
-	{
-		value: 'claude',
-		slug: 'claude',
-		label: i18n.baseText(
-			'experiments.surfaceMcpToNewCloudUsers.onboarding.client.claude' as BaseTextKey,
-		),
-	},
-	{
-		value: 'claude_code',
-		slug: 'claude-code',
-		label: i18n.baseText('experiments.surfaceMcpToNewCloudUsers.onboarding.client.claudeCode'),
-	},
 	{
 		value: 'codex',
 		slug: 'codex',
@@ -82,15 +70,10 @@ const clientOptions = computed<MCPOnboardingClientOption[]>(() => [
 
 const serverUrl = computed(() => `${rootStore.urlBaseEditor}${MCP_ENDPOINT}`);
 const isChatGptClient = computed(() => activeClient.value === 'chatgpt');
-const showServerUrlStep = computed(() => activeClient.value === 'claude');
-const showRestartStep = computed(
-	() =>
-		activeClient.value === 'claude_code' ||
-		activeClient.value === 'cursor' ||
-		activeClient.value === 'codex',
-);
+const showServerUrlStep = computed(() => false);
+const showRestartStep = computed(() => activeClient.value === 'cursor' || activeClient.value === 'codex');
 const activePromptClient = computed<MCPOnboardingPromptClient>(() =>
-	activeClient.value === 'chatgpt' ? 'claude' : activeClient.value,
+	activeClient.value === 'chatgpt' ? 'codex' : activeClient.value,
 );
 const activeClientLabel = computed(
 	() =>
@@ -409,7 +392,7 @@ onBeforeUnmount(() => {
 								<MCPOnboardingCopyBlock
 									:content="serverUrl"
 									copy-button-test-id="mcp-onboarding-copy-server-url-button"
-									data-test-id="mcp-onboarding-claude-server-url"
+									data-test-id="mcp-onboarding-server-url"
 									@copy="handleCopyParameter('server-url')"
 								/>
 							</div>

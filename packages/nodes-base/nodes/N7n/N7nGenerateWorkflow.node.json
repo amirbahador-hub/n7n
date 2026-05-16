@@ -1,0 +1,11 @@
+{
+	"node": "n8n-nodes-base.n7nGenerateWorkflow",
+	"nodeVersion": "1.0",
+	"codexVersion": "1.0",
+	"details": "Generates an editable n7n engineering workflow draft from a natural language request.",
+	"categories": ["Development", "Core Nodes"],
+	"alias": ["AI Workflow Generator", "Generate Workflow", "Engineering Workflow"],
+	"subcategories": {
+		"Core Nodes": ["AI", "Helpers"]
+	}
+}

@@ -1,0 +1,11 @@
+{
+	"node": "n8n-nodes-base.n7nRuffValidation",
+	"nodeVersion": "1.0",
+	"codexVersion": "1.0",
+	"details": "Represents a Ruff validation step with repair-loop metadata.",
+	"categories": ["Development", "Core Nodes"],
+	"alias": ["Ruff", "Python Lint", "Validation"],
+	"subcategories": {
+		"Core Nodes": ["Helpers"]
+	}
+}

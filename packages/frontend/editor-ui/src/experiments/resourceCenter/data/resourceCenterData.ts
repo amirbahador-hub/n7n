@@ -143,8 +143,8 @@ export const learnContent: OrderedSectionResource[] = [
 	{
 		type: 'video',
 		videoId: 'OCO3aq3G0mk',
-		title: 'Get Claude to build workflows',
-		description: 'Build workflow from Claude directly in n8n using MCP and skills',
+		title: 'Get Codex to build workflows',
+		description: 'Build workflows from Codex directly in n8n using MCP and agent instructions',
 	},
 	{
 		type: 'template',

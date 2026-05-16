@@ -1,0 +1,11 @@
+{
+	"node": "n8n-nodes-base.n7nOpenTelemetryTrace",
+	"nodeVersion": "1.0",
+	"codexVersion": "1.0",
+	"details": "Attaches OpenTelemetry-oriented execution metadata to an n7n engineering workflow.",
+	"categories": ["Development", "Core Nodes"],
+	"alias": ["OpenTelemetry", "Tracing", "Observability"],
+	"subcategories": {
+		"Core Nodes": ["Helpers"]
+	}
+}

@@ -1,7 +1,7 @@
 {
   "name": "n8n",
   "version": "2.21.0",
-  "description": "n8n Workflow Automation Tool",
+  "description": "n7n AI-native engineering workflow orchestration",
   "main": "dist/index",
   "types": "dist/index.d.ts",
   "scripts": {
@@ -18,6 +18,7 @@
     "lint": "eslint . --quiet",
     "lint:fix": "eslint . --fix",
     "start": "node ../../scripts/os-normalize.mjs --dir bin n8n",
+    "start:n7n": "node ../../scripts/os-normalize.mjs --dir bin n7n",
     "test": "N8N_LOG_LEVEL=silent DB_SQLITE_POOL_SIZE=4 DB_TYPE=sqlite jest",
     "test:unit": "N8N_LOG_LEVEL=silent DB_SQLITE_POOL_SIZE=4 DB_TYPE=sqlite jest --config=jest.config.unit.js",
     "test:integration": "N8N_LOG_LEVEL=silent DB_SQLITE_POOL_SIZE=4 DB_TYPE=sqlite jest --config=jest.config.integration.js",
@@ -39,6 +40,7 @@
     "watch": "tsc-watch -p tsconfig.build.json --onCompilationComplete \"tsc-alias -p tsconfig.build.json\""
   },
   "bin": {
+    "n7n": "./bin/n7n",
     "n8n": "./bin/n8n"
   },
   "keywords": [

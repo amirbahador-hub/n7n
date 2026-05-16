@@ -1,0 +1,135 @@
+{
+	"name": "n7n Autonomous PR Review",
+	"nodes": [
+		{
+			"parameters": {
+				"repositoryUrl": "https://github.com/example/service",
+				"includeDependencyGraph": true,
+				"includeArchitectureSummary": true,
+				"relevantFileHints": "Pull request changed files\nPython package metadata\nTest configuration"
+			},
+			"id": "repository-analysis",
+			"name": "Repository Analysis",
+			"type": "n8n-nodes-base.n7nRepositoryAnalysis",
+			"typeVersion": 1,
+			"position": [0, 0]
+		},
+		{
+			"parameters": {
+				"operation": "analyze",
+				"repository": "example/service",
+				"pullRequestNumber": 123,
+				"requireApproval": true
+			},
+			"id": "github-pr",
+			"name": "GitHub PR",
+			"type": "n8n-nodes-base.n7nGitHubPr",
+			"typeVersion": 1,
+			"position": [260, 0]
+		},
+		{
+			"parameters": {
+				"task": "Review this pull request as an engineering agent. Use repository context, identify correctness risks, suggest focused remediation, and prepare comments behind human approval.",
+				"provider": "openai",
+				"model": "",
+				"executionMode": "fullLoop",
+				"allowedCapabilities": [
+					"taskPlanning",
+					"codeGeneration",
+					"shellExecution",
+					"repositoryAnalysis",
+					"validationExecution",
+					"artifactGeneration"
+				],
+				"repositoryUrl": "https://github.com/example/service",
+				"systemContext": "Autonomous PR review workflow. Do not merge or publish comments without approval. Use validation results for remediation suggestions.",
+				"maxRepairAttempts": 2
+			},
+			"id": "codex-task",
+			"name": "Codex Review",
+			"type": "n8n-nodes-base.n7nCodexTask",
+			"typeVersion": 1,
+			"position": [520, 0]
+		},
+		{
+			"parameters": {
+				"command": "ruff check .",
+				"workingDirectory": ".",
+				"runCommand": false,
+				"timeoutSeconds": 120,
+				"repairTarget": "codexTask",
+				"maxRepairAttempts": 2
+			},
+			"id": "ruff-validation",
+			"name": "Ruff Validation",
+			"type": "n8n-nodes-base.n7nRuffValidation",
+			"typeVersion": 1,
+			"position": [780, 0]
+		},
+		{
+			"parameters": {
+				"command": "mypy .",
+				"workingDirectory": ".",
+				"runCommand": false,
+				"timeoutSeconds": 120,
+				"repairTarget": "codexTask",
+				"maxRepairAttempts": 2
+			},
+			"id": "mypy-validation",
+			"name": "mypy Validation",
+			"type": "n8n-nodes-base.n7nMypyValidation",
+			"typeVersion": 1,
+			"position": [1040, 0]
+		},
+		{
+			"parameters": {
+				"command": "pytest",
+				"workingDirectory": ".",
+				"runCommand": false,
+				"timeoutSeconds": 120,
+				"repairTarget": "codexTask",
+				"maxRepairAttempts": 2
+			},
+			"id": "pytest-validation",
+			"name": "pytest Validation",
+			"type": "n8n-nodes-base.n7nPytestValidation",
+			"typeVersion": 1,
+			"position": [1300, 0]
+		},
+		{
+			"parameters": {
+				"spanName": "n7n.workflow.autonomous_pr_review",
+				"eventName": "pr_review.completed",
+				"traceAttributes": "{\"workflow.kind\":\"autonomous-pr-review\",\"approval.required\":true}"
+			},
+			"id": "opentelemetry-trace",
+			"name": "OpenTelemetry Trace",
+			"type": "n8n-nodes-base.n7nOpenTelemetryTrace",
+			"typeVersion": 1,
+			"position": [1560, 0]
+		}
+	],
+	"connections": {
+		"Repository Analysis": {
+			"main": [[{ "node": "GitHub PR", "type": "main", "index": 0 }]]
+		},
+		"GitHub PR": {
+			"main": [[{ "node": "Codex Review", "type": "main", "index": 0 }]]
+		},
+		"Codex Review": {
+			"main": [[{ "node": "Ruff Validation", "type": "main", "index": 0 }]]
+		},
+		"Ruff Validation": {
+			"main": [[{ "node": "mypy Validation", "type": "main", "index": 0 }]]
+		},
+		"mypy Validation": {
+			"main": [[{ "node": "pytest Validation", "type": "main", "index": 0 }]]
+		},
+		"pytest Validation": {
+			"main": [[{ "node": "OpenTelemetry Trace", "type": "main", "index": 0 }]]
+		}
+	},
+	"settings": {
+		"executionOrder": "v1"
+	}
+}

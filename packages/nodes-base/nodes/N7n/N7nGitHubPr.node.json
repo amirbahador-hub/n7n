@@ -1,0 +1,11 @@
+{
+	"node": "n8n-nodes-base.n7nGitHubPr",
+	"nodeVersion": "1.0",
+	"codexVersion": "1.0",
+	"details": "Prepares GitHub pull request context and approval-aware PR actions.",
+	"categories": ["Development", "Core Nodes"],
+	"alias": ["GitHub PR", "Pull Request", "Code Review"],
+	"subcategories": {
+		"Core Nodes": ["Helpers"]
+	}
+}

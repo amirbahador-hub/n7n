@@ -35,7 +35,7 @@ describe('SurfaceMcpEmptyStateTile', () => {
 		expect(card).toHaveTextContent('Build from your assistant');
 		expect(getByTestId('mcp-onboarding-badge')).toHaveTextContent('New');
 		expect(getByTestId('mcp-tile-logo-row')).toBeInTheDocument();
-		expect(queryByText(/Connect MCP clients like Claude Code and Cursor/)).not.toBeInTheDocument();
+		expect(queryByText(/Connect MCP clients like Codex and Cursor/)).not.toBeInTheDocument();
 	});
 
 	it('renders variant 2 CTA with a New badge', () => {
@@ -47,7 +47,7 @@ describe('SurfaceMcpEmptyStateTile', () => {
 		expect(card).toHaveTextContent('Connect to your AI');
 		expect(getByTestId('mcp-onboarding-badge')).toHaveTextContent('New');
 		expect(getByTestId('mcp-tile-logo-row')).toBeInTheDocument();
-		expect(queryByText(/Connect MCP clients like Claude Code and Cursor/)).not.toBeInTheDocument();
+		expect(queryByText(/Connect MCP clients like Codex and Cursor/)).not.toBeInTheDocument();
 	});
 
 	it('renders the Enabled badge when MCP access is enabled', () => {

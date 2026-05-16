@@ -1,0 +1,11 @@
+{
+	"node": "n8n-nodes-base.n7nPytestValidation",
+	"nodeVersion": "1.0",
+	"codexVersion": "1.0",
+	"details": "Represents a pytest validation step with repair-loop metadata.",
+	"categories": ["Development", "Core Nodes"],
+	"alias": ["pytest", "Python Test", "Validation"],
+	"subcategories": {
+		"Core Nodes": ["Helpers"]
+	}
+}

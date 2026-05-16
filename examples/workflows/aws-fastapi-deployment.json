@@ -1,0 +1,83 @@
+{
+	"name": "n7n FastAPI AWS Deployment",
+	"nodes": [
+		{
+			"parameters": {
+				"repositoryUrl": "https://github.com/example/fastapi-service",
+				"includeDependencyGraph": true,
+				"includeArchitectureSummary": true,
+				"relevantFileHints": "FastAPI app\nDockerfile\nTerraform\nECS service configuration"
+			},
+			"id": "repository-analysis",
+			"name": "Repository Analysis",
+			"type": "n8n-nodes-base.n7nRepositoryAnalysis",
+			"typeVersion": 1,
+			"position": [0, 0]
+		},
+		{
+			"parameters": {
+				"task": "Analyze this FastAPI repository and generate an AWS ECS deployment plan. Validate Docker setup, propose Terraform updates, and produce a health-check validation plan. Do not deploy without human approval.",
+				"provider": "openai",
+				"model": "",
+				"executionMode": "planAndGenerate",
+				"allowedCapabilities": [
+					"taskPlanning",
+					"codeGeneration",
+					"shellExecution",
+					"repositoryAnalysis",
+					"validationExecution",
+					"artifactGeneration"
+				],
+				"repositoryUrl": "https://github.com/example/fastapi-service",
+				"systemContext": "AWS context: ECS Fargate, Terraform, production approval required.",
+				"maxRepairAttempts": 2
+			},
+			"id": "codex-task",
+			"name": "Codex Deployment Plan",
+			"type": "n8n-nodes-base.n7nCodexTask",
+			"typeVersion": 1,
+			"position": [260, 0]
+		},
+		{
+			"parameters": {
+				"command": "pytest",
+				"workingDirectory": ".",
+				"runCommand": false,
+				"timeoutSeconds": 180,
+				"repairTarget": "codexTask",
+				"maxRepairAttempts": 2
+			},
+			"id": "pytest-validation",
+			"name": "pytest Validation",
+			"type": "n8n-nodes-base.n7nPytestValidation",
+			"typeVersion": 1,
+			"position": [520, 0]
+		},
+		{
+			"parameters": {
+				"spanName": "n7n.workflow.aws_fastapi_deployment",
+				"eventName": "deployment_plan.generated",
+				"traceAttributes": "{\"workflow.kind\":\"aws-fastapi-deployment\",\"approval.required\":true}"
+			},
+			"id": "opentelemetry-trace",
+			"name": "OpenTelemetry Trace",
+			"type": "n8n-nodes-base.n7nOpenTelemetryTrace",
+			"typeVersion": 1,
+			"position": [780, 0]
+		}
+	],
+	"connections": {
+		"Repository Analysis": {
+			"main": [[{ "node": "Codex Deployment Plan", "type": "main", "index": 0 }]]
+		},
+		"Codex Deployment Plan": {
+			"main": [[{ "node": "pytest Validation", "type": "main", "index": 0 }]]
+		},
+		"pytest Validation": {
+			"main": [[{ "node": "OpenTelemetry Trace", "type": "main", "index": 0 }]]
+		}
+	},
+	"settings": {
+		"executionOrder": "v1"
+	}
+}
